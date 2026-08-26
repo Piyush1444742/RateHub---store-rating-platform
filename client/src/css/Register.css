@@ -1,0 +1,221 @@
+.register-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 35px 20px;
+    background:
+        radial-gradient(circle at top left, #e8efff, transparent 35%),
+        radial-gradient(circle at bottom right, #ece9ff, transparent 35%),
+        #f5f7fb;
+}
+
+.register-card {
+    width: 100%;
+    max-width: 570px;
+    background: white;
+    border: 1px solid #e5e9f1;
+    border-radius: 24px;
+    padding: 35px;
+    box-shadow: 0 25px 70px rgba(15, 23, 42, .10);
+}
+
+.register-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.register-logo {
+    width: 46px;
+    height: 46px;
+    border-radius: 13px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #2864ee, #5549e8);
+    color: white;
+    font-size: 21px;
+}
+
+.register-header h1 {
+    margin: 0;
+    font-size: 21px;
+    color: #172033;
+}
+
+.register-header span {
+    display: block;
+    margin-top: 3px;
+    color: #94a3b8;
+    font-size: 8px;
+    letter-spacing: 1.3px;
+    font-weight: 800;
+}
+
+.register-label {
+    color: #2563eb;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.3px;
+}
+
+.register-title h2 {
+    margin: 6px 0;
+    color: #172033;
+    font-size: 29px;
+}
+
+.register-title p {
+    margin: 0 0 25px;
+    color: #7b8799;
+    font-size: 13px;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+}
+
+.register-field label {
+    display: block;
+    margin-bottom: 7px;
+    color: #334155;
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.register-field input,
+.register-field textarea {
+    width: 100%;
+    border: 1px solid #dce2eb;
+    border-radius: 10px;
+    padding: 12px 13px;
+    color: #172033;
+    background: white;
+    font-size: 13px;
+    transition: .2s;
+    resize: vertical;
+}
+
+.register-field input {
+    height: 46px;
+}
+
+.register-field input:focus,
+.register-field textarea:focus {
+    outline: none;
+    border-color: #2864ee;
+    box-shadow: 0 0 0 4px rgba(40, 100, 238, .08);
+}
+
+.register-field input:disabled,
+.register-field textarea:disabled {
+    background: #f8fafc;
+    cursor: not-allowed;
+}
+
+.field-bottom {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+
+.field-bottom small,
+.field-bottom span,
+.field-help {
+    color: #94a3b8;
+    font-size: 9px;
+}
+
+.field-error {
+    margin: 5px 0 0;
+    color: #dc2626;
+    font-size: 10px;
+}
+
+.register-alert {
+    display: flex;
+    gap: 9px;
+    align-items: center;
+    padding: 11px 13px;
+    border-radius: 9px;
+    margin-bottom: 17px;
+    font-size: 11px;
+}
+
+.register-alert.error {
+    background: #fff1f2;
+    border: 1px solid #ffe4e6;
+    color: #be123c;
+}
+
+.register-alert.success {
+    background: #ecfdf5;
+    border: 1px solid #d1fae5;
+    color: #047857;
+}
+
+.register-submit {
+    height: 48px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #2864ee, #5549e8);
+    color: white;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 3px;
+    box-shadow: 0 8px 20px rgba(40, 100, 238, .18);
+    transition: .2s;
+}
+
+.register-submit:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 25px rgba(40, 100, 238, .24);
+}
+
+.register-submit:disabled {
+    opacity: .65;
+    cursor: not-allowed;
+}
+
+.register-footer {
+    border-top: 1px solid #edf0f5;
+    margin-top: 25px;
+    padding-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #7b8799;
+}
+
+.register-footer button {
+    border: none;
+    background: transparent;
+    color: #2563eb;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.register-footer button:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+    .register-page {
+        padding: 20px 12px;
+        align-items: flex-start;
+    }
+
+    .register-card {
+        padding: 25px 20px;
+        border-radius: 18px;
+    }
+
+    .register-title h2 {
+        font-size: 25px;
+    }
+}
