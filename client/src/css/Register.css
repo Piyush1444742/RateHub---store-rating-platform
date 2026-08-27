@@ -219,3 +219,109 @@
         font-size: 25px;
     }
 }
+
+/* ---------- Account Type Selection ---------- */
+
+.account-type-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 5px;
+}
+
+.account-type-card {
+    border: 1px solid #dce2eb;
+    border-radius: 16px;
+    background: #fff;
+    padding: 24px 18px;
+    text-align: left;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.account-type-card:hover {
+    border-color: #2864ee;
+    box-shadow: 0 8px 25px rgba(40, 100, 238, .10);
+    transform: translateY(-2px);
+}
+
+.account-type-icon {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 13px;
+    background: #eff6ff;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+.account-type-card h3 {
+    margin: 0 0 7px;
+    color: #172033;
+    font-size: 16px;
+}
+
+.account-type-card p {
+    margin: 0 0 15px;
+    color: #7b8799;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.account-type-card > span {
+    color: #2563eb;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+
+/* ---------- Registration Sections ---------- */
+
+.form-section-title {
+    padding: 12px 0 2px;
+    border-bottom: 1px solid #edf0f5;
+    color: #2563eb;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.store-section-title {
+    margin-top: 4px;
+}
+
+
+/* ---------- Back Button ---------- */
+
+.back-register {
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin-bottom: 16px;
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.back-register:hover {
+    color: #2563eb;
+}
+
+.back-register:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 600px) {
+
+    .account-type-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
