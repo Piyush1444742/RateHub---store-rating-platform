@@ -45,7 +45,6 @@ const Register = () => {
     const chooseAccountType = (type) => {
 
         setAccountType(type);
-
         setErrors({});
         setServerError("");
         setSuccess("");
@@ -58,7 +57,6 @@ const Register = () => {
         if (loading) return;
 
         setAccountType("");
-
         setErrors({});
         setServerError("");
         setSuccess("");
@@ -83,6 +81,12 @@ const Register = () => {
         const address =
             form.address.trim();
 
+        const emailRegex =
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        const passwordRegex =
+            /^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,16}$/;
+
 
         // Name
         if (!name) {
@@ -102,10 +106,6 @@ const Register = () => {
 
 
         // Email
-        const emailRegex =
-            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-
         if (!email) {
 
             newErrors.email =
@@ -122,10 +122,6 @@ const Register = () => {
 
 
         // Password
-        const passwordRegex =
-            /^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,16}$/;
-
-
         if (!form.password) {
 
             newErrors.password =
@@ -176,8 +172,10 @@ const Register = () => {
         }
 
 
-        // Owner Store Validation
-        if (accountType === "OWNER") {
+        // Owner Store Details
+        if (
+            accountType === "OWNER"
+        ) {
 
             const storeName =
                 form.storeName.trim();
@@ -203,7 +201,9 @@ const Register = () => {
                     "Store email is required.";
 
             } else if (
-                !emailRegex.test(storeEmail)
+                !emailRegex.test(
+                    storeEmail
+                )
             ) {
 
                 newErrors.storeEmail =
@@ -284,16 +284,12 @@ const Register = () => {
 
 
         if (!accountType) {
-
             return;
-
         }
 
 
         if (!validate()) {
-
             return;
-
         }
 
 
@@ -447,22 +443,22 @@ const Register = () => {
                             }
                         >
 
-                            <div className="account-type-icon">
-                                👤
+                            <div className="account-type-content">
+
+                                <h3>
+                                    Normal User
+                                </h3>
+
+                                <p>
+                                    Browse stores, view
+                                    ratings and share
+                                    your experience.
+                                </p>
+
                             </div>
 
-                            <h3>
-                                Normal User
-                            </h3>
-
-                            <p>
-                                Browse stores, view
-                                ratings and share
-                                your experience.
-                            </p>
-
-                            <span>
-                                Register as User →
+                            <span className="account-type-arrow">
+                                →
                             </span>
 
                         </button>
@@ -478,22 +474,22 @@ const Register = () => {
                             }
                         >
 
-                            <div className="account-type-icon">
-                                🏪
+                            <div className="account-type-content">
+
+                                <h3>
+                                    Store Owner
+                                </h3>
+
+                                <p>
+                                    Register your store
+                                    and manage customer
+                                    ratings.
+                                </p>
+
                             </div>
 
-                            <h3>
-                                Store Owner
-                            </h3>
-
-                            <p>
-                                Register your store
-                                and manage customer
-                                ratings.
-                            </p>
-
-                            <span>
-                                Register as Owner →
+                            <span className="account-type-arrow">
+                                →
                             </span>
 
                         </button>
@@ -584,16 +580,18 @@ const Register = () => {
 
 
                     <h2>
+
                         {accountType === "OWNER"
                             ? "Create Owner Account"
                             : "Create User Account"}
+
                     </h2>
 
 
                     <p>
 
                         {accountType === "OWNER"
-                            ? "Create your owner account and add your store."
+                            ? "Enter your account and store details."
                             : "Create your account and start rating stores."}
 
                     </p>
@@ -636,10 +634,6 @@ const Register = () => {
                     onSubmit={handleSubmit}
                 >
 
-
-                    {/* =========================
-                        PERSONAL DETAILS
-                    ========================== */}
 
                     {accountType === "OWNER" && (
 
@@ -833,20 +827,16 @@ const Register = () => {
                     </div>
 
 
-                    {/* =========================
-                        STORE DETAILS
-                    ========================== */}
+                    {/* STORE DETAILS */}
 
                     {accountType === "OWNER" && (
 
                         <>
 
-                            <div className="form-section-title store-section-title">
+                            <div className="form-section-title">
                                 Store Details
                             </div>
 
-
-                            {/* STORE NAME */}
 
                             <div className="register-field">
 
@@ -879,8 +869,6 @@ const Register = () => {
                             </div>
 
 
-                            {/* STORE EMAIL */}
-
                             <div className="register-field">
 
                                 <label htmlFor="storeEmail">
@@ -911,8 +899,6 @@ const Register = () => {
 
                             </div>
 
-
-                            {/* STORE ADDRESS */}
 
                             <div className="register-field">
 
@@ -962,8 +948,6 @@ const Register = () => {
 
                     )}
 
-
-                    {/* SUBMIT */}
 
                     <button
                         type="submit"
