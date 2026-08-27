@@ -2,6 +2,16 @@ import { useEffect, useMemo, useState } from "react";
 import api from "../services/api";
 import "../css/AdminDashboard.css";
 
+import AdminSidebar from "../components/admin/AdminSidebar";
+import AdminHeader from "../components/admin/AdminHeader";
+import AdminOverview from "../components/admin/AdminOverview";
+import AdminUsers from "../components/admin/AdminUsers";
+import AdminStores from "../components/admin/AdminStores";
+import AddUserModal from "../components/admin/AddUserModal";
+import AddStoreModal from "../components/admin/AddStoreModal";
+import UserDetailsModal from "../components/admin/UserDetailsModal";
+import AdminProfileModal from "../components/admin/AdminProfileModal";
+
 const emptyUserForm = {
     name: "",
     email: "",
@@ -35,8 +45,8 @@ const AdminDashboard = () => {
     const [storesLoading, setStoresLoading] = useState(false);
 
     const [error, setError] = useState("");
-    // Admin Profile
 
+    // Admin Profile
     const [showAccountMenu, setShowAccountMenu] = useState(false);
     const [showProfileModal, setShowProfileModal] = useState(false);
 
@@ -61,8 +71,8 @@ const AdminDashboard = () => {
 
     const adminAddress =
         storedUser.address || "Address not available";
-    // User Filters
 
+    // User Filters
     const [userFilters, setUserFilters] = useState({
         name: "",
         email: "",
@@ -71,8 +81,8 @@ const AdminDashboard = () => {
         sortBy: "name",
         sortOrder: "asc"
     });
-    // Store Filters
 
+    // Store Filters
     const [storeFilters, setStoreFilters] = useState({
         name: "",
         email: "",
@@ -80,20 +90,23 @@ const AdminDashboard = () => {
         sortBy: "name",
         sortOrder: "asc"
     });
+
     // Modals
+    const [showUserModal, setShowUserModal] =
+        useState(false);
 
-    const [showUserModal, setShowUserModal] = useState(false);
-    const [showStoreModal, setShowStoreModal] = useState(false);
-    const [selectedUser, setSelectedUser] = useState(null);
+    const [showStoreModal, setShowStoreModal] =
+        useState(false);
+
+    const [selectedUser, setSelectedUser] =
+        useState(null);
+
     // Forms
+    const [userForm, setUserForm] =
+        useState(emptyUserForm);
 
-    const [userForm, setUserForm] = useState(
-        emptyUserForm
-    );
-
-    const [storeForm, setStoreForm] = useState(
-        emptyStoreForm
-    );
+    const [storeForm, setStoreForm] =
+        useState(emptyStoreForm);
 
     const [formLoading, setFormLoading] =
         useState(false);
@@ -103,8 +116,8 @@ const AdminDashboard = () => {
 
     const [formError, setFormError] =
         useState("");
-    // Fetch Dashboard
 
+    // Fetch Dashboard
     const fetchDashboard = async () => {
         try {
             setError("");
@@ -131,8 +144,8 @@ const AdminDashboard = () => {
             );
         }
     };
-    // Fetch Users
 
+    // Fetch Users
     const fetchUsers = async () => {
         try {
             setUsersLoading(true);
@@ -198,8 +211,8 @@ const AdminDashboard = () => {
             setUsersLoading(false);
         }
     };
-    // Fetch Stores
 
+    // Fetch Stores
     const fetchStores = async () => {
         try {
             setStoresLoading(true);
@@ -258,8 +271,8 @@ const AdminDashboard = () => {
             setStoresLoading(false);
         }
     };
-    // Initial Load
 
+    // Initial Load
     useEffect(() => {
 
         const loadData = async () => {
@@ -278,8 +291,8 @@ const AdminDashboard = () => {
         loadData();
 
     }, []);
-    // User Filter Effect
 
+    // User Filter Effect
     useEffect(() => {
 
         if (!loading) {
@@ -294,8 +307,8 @@ const AdminDashboard = () => {
         userFilters.sortBy,
         userFilters.sortOrder
     ]);
-    // Store Filter Effect
 
+    // Store Filter Effect
     useEffect(() => {
 
         if (!loading) {
@@ -309,8 +322,8 @@ const AdminDashboard = () => {
         storeFilters.sortBy,
         storeFilters.sortOrder
     ]);
-    // User Form
 
+    // User Form
     const handleUserChange = (e) => {
 
         const {
@@ -439,8 +452,8 @@ const AdminDashboard = () => {
             setFormLoading(false);
         }
     };
-    // Store Form
 
+    // Store Form
     const handleStoreChange = (e) => {
 
         const {
@@ -538,8 +551,8 @@ const AdminDashboard = () => {
             setFormLoading(false);
         }
     };
-    // User Details
 
+    // User Details
     const openUserDetails =
         async (userId) => {
 
@@ -572,8 +585,12 @@ const AdminDashboard = () => {
                 });
             }
         };
-    // Account Menu
 
+    const closeUserDetails = () => {
+        setSelectedUser(null);
+    };
+
+    // Account Menu
     const openProfileModal = () => {
 
         setShowAccountMenu(false);
@@ -585,23 +602,17 @@ const AdminDashboard = () => {
 
         setShowProfileModal(false);
     };
-    // Logout
 
+    // Logout
     const handleLogout = () => {
 
-        localStorage.removeItem(
-            "token"
-        );
+        localStorage.removeItem("token");
+        localStorage.removeItem("userInfo");
 
-        localStorage.removeItem(
-            "userInfo"
-        );
-
-        window.location.href =
-            "/login";
+        window.location.href = "/login";
     };
-    // Filter Helpers
 
+    // Filter Helpers
     const updateUserFilter = (
         name,
         value
@@ -650,8 +661,8 @@ const AdminDashboard = () => {
             sortOrder: "asc"
         });
     };
-    // Modal Helpers
 
+    // Modal Helpers
     const closeUserModal = () => {
 
         if (formLoading) return;
@@ -679,8 +690,8 @@ const AdminDashboard = () => {
         setFormMessage("");
         setFormError("");
     };
-    // Stars
 
+    // Stars
     const stars = (rating) => {
 
         const value =
@@ -708,11 +719,12 @@ const AdminDashboard = () => {
                     >
                         {star}
                     </span>
+
                 )
             );
     };
-    // Loading
 
+    // Loading
     if (loading) {
 
         return (
@@ -735,2000 +747,175 @@ const AdminDashboard = () => {
             </div>
         );
     }
-    // Main Ui
 
+    // Main UI
     return (
 
         <div className="admin-page">
-            {/* Sidebar */}
 
-            <aside className="admin-sidebar">
+            <AdminSidebar
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                totalUsers={stats.totalUsers}
+                totalStores={stats.totalStores}
+                onLogout={handleLogout}
+            />
 
-                <div className="admin-brand">
-
-                    <div className="admin-brand-icon">
-                        ★
-                    </div>
-
-                    <div>
-                        <strong>
-                            RateHub
-                        </strong>
-
-                        <span>
-                            ADMIN PORTAL
-                        </span>
-                    </div>
-
-                </div>
-
-                <nav className="admin-nav">
-
-                    <button
-                        className={
-                            activeTab === "overview"
-                                ? "admin-nav-item active"
-                                : "admin-nav-item"
-                        }
-                        onClick={() =>
-                            setActiveTab(
-                                "overview"
-                            )
-                        }
-                    >
-                        <span>⌂</span>
-                        Overview
-                    </button>
-
-                    <button
-                        className={
-                            activeTab === "users"
-                                ? "admin-nav-item active"
-                                : "admin-nav-item"
-                        }
-                        onClick={() =>
-                            setActiveTab(
-                                "users"
-                            )
-                        }
-                    >
-                        <span>◉</span>
-                        Users
-
-                        <small>
-                            {stats.totalUsers}
-                        </small>
-                    </button>
-
-                    <button
-                        className={
-                            activeTab === "stores"
-                                ? "admin-nav-item active"
-                                : "admin-nav-item"
-                        }
-                        onClick={() =>
-                            setActiveTab(
-                                "stores"
-                            )
-                        }
-                    >
-                        <span>▣</span>
-                        Stores
-
-                        <small>
-                            {stats.totalStores}
-                        </small>
-                    </button>
-
-                </nav>
-
-                <div className="admin-sidebar-bottom">
-
-                    <div className="admin-security-note">
-
-                        <span>✓</span>
-
-                        <div>
-
-                            <strong>
-                                Secure session
-                            </strong>
-
-                            <small>
-                                Administrator access
-                            </small>
-
-                        </div>
-
-                    </div>
-
-                    <button
-                        className="admin-logout"
-                        onClick={
-                            handleLogout
-                        }
-                    >
-                        <span>↪</span>
-                        Logout
-                    </button>
-
-                </div>
-
-            </aside>
-            {/* Main */}
 
             <main className="admin-main">
-            {/* Top Bar */}
 
-                <header className="admin-topbar">
+                <AdminHeader
+                    activeTab={activeTab}
+                    adminName={adminName}
+                    adminEmail={adminEmail}
+                    setShowAccountMenu={
+                        setShowAccountMenu
+                    }
+                    showAccountMenu={
+                        showAccountMenu
+                    }
+                    openProfileModal={
+                        openProfileModal
+                    }
+                    handleLogout={
+                        handleLogout
+                    }
+                />
 
-                    <div>
-
-                        <span className="admin-eyebrow">
-                            SYSTEM ADMINISTRATION
-                        </span>
-
-                        <h1>
-                            {activeTab ===
-                                "overview"
-                                ? "Dashboard"
-                                : activeTab ===
-                                    "users"
-                                    ? "User Management"
-                                    : "Store Management"}
-                        </h1>
-
-                    </div>
-
-                    {/* ADMIN ACCOUNT */}
-
-                    <div className="admin-account-container">
-
-                        <button
-                            type="button"
-                            className="admin-account-button"
-                            onClick={() =>
-                                setShowAccountMenu(
-                                    !showAccountMenu
-                                )
-                            }
-                        >
-
-                            <div className="admin-avatar">
-
-                                {adminName
-                                    .charAt(0)
-                                    .toUpperCase()}
-
-                            </div>
-
-                            <div className="admin-profile">
-
-                                <strong>
-                                    {adminName}
-                                </strong>
-
-                                <span>
-                                    System Admin
-                                </span>
-
-                            </div>
-
-                            <span className="admin-account-arrow">
-                                ▾
-                            </span>
-
-                        </button>
-
-                        {/* ACCOUNT DROPDOWN */}
-
-                        {showAccountMenu && (
-
-                            <div className="admin-account-menu">
-
-                                <div className="admin-menu-header">
-
-                                    <div className="admin-menu-avatar">
-
-                                        {adminName
-                                            .charAt(0)
-                                            .toUpperCase()}
-
-                                    </div>
-
-                                    <div>
-
-                                        <strong>
-                                            {adminName}
-                                        </strong>
-
-                                        <span>
-                                            {adminEmail}
-                                        </span>
-
-                                    </div>
-
-                                </div>
-
-                                <div className="admin-menu-divider" />
-
-                                <button
-                                    type="button"
-                                    onClick={
-                                        openProfileModal
-                                    }
-                                >
-                                    <span>
-                                        👤
-                                    </span>
-
-                                    My Profile
-                                </button>
-
-                                <div className="admin-menu-divider" />
-
-                                <button
-                                    type="button"
-                                    className="admin-menu-logout"
-                                    onClick={
-                                        handleLogout
-                                    }
-                                >
-                                    <span>
-                                        ↪
-                                    </span>
-
-                                    Logout
-                                </button>
-
-                            </div>
-
-                        )}
-
-                    </div>
-
-                </header>
 
                 {error && (
 
                     <div className="admin-alert error">
 
-                        <span>!</span>
+                        <span>
+                            !
+                        </span>
 
                         {error}
 
                     </div>
 
                 )}
-            {/* Overview */}
 
-                {activeTab ===
-                    "overview" && (
 
-                        <section className="admin-content">
+                {activeTab === "overview" && (
 
-                            <div className="admin-welcome">
+                    <AdminOverview
+                        stats={stats}
+                        setActiveTab={setActiveTab}
+                    />
 
-                                <div>
+                )}
 
-                                    <span>
-                                        WELCOME BACK
-                                    </span>
 
-                                    <h2>
-                                        Manage your platform
-                                    </h2>
+                {activeTab === "users" && (
 
-                                    <p>
-                                        Monitor users, stores and
-                                        customer ratings from one place.
-                                    </p>
+                    <AdminUsers
+                        users={users}
+                        usersLoading={usersLoading}
+                        userFilters={userFilters}
+                        updateUserFilter={
+                            updateUserFilter
+                        }
+                        resetUserFilters={
+                            resetUserFilters
+                        }
+                        openUserDetails={
+                            openUserDetails
+                        }
+                        onAddUser={() => {
 
-                                </div>
+                            setFormError("");
+                            setFormMessage("");
+                            setShowUserModal(true);
 
-                                <div className="admin-welcome-icon">
-                                    ★
-                                </div>
+                        }}
+                    />
 
-                            </div>
+                )}
 
-                            <div className="admin-stat-grid">
 
-                                <div className="admin-stat-card blue">
+                {activeTab === "stores" && (
 
-                                    <div className="admin-stat-icon">
-                                        ◉
-                                    </div>
+                    <AdminStores
+                        stores={stores}
+                        storesLoading={storesLoading}
+                        storeFilters={storeFilters}
+                        updateStoreFilter={
+                            updateStoreFilter
+                        }
+                        resetStoreFilters={
+                            resetStoreFilters
+                        }
+                        stars={stars}
+                        onAddStore={() => {
 
-                                    <div>
+                            setFormError("");
+                            setFormMessage("");
+                            setShowStoreModal(true);
 
-                                        <span>
-                                            Total Users
-                                        </span>
+                        }}
+                    />
 
-                                        <strong>
-                                            {stats.totalUsers}
-                                        </strong>
-
-                                        <small>
-                                            Registered accounts
-                                        </small>
-
-                                    </div>
-
-                                </div>
-
-                                <div className="admin-stat-card purple">
-
-                                    <div className="admin-stat-icon">
-                                        ▣
-                                    </div>
-
-                                    <div>
-
-                                        <span>
-                                            Total Stores
-                                        </span>
-
-                                        <strong>
-                                            {stats.totalStores}
-                                        </strong>
-
-                                        <small>
-                                            Stores on platform
-                                        </small>
-
-                                    </div>
-
-                                </div>
-
-                                <div className="admin-stat-card orange">
-
-                                    <div className="admin-stat-icon">
-                                        ★
-                                    </div>
-
-                                    <div>
-
-                                        <span>
-                                            Total Ratings
-                                        </span>
-
-                                        <strong>
-                                            {stats.totalRatings}
-                                        </strong>
-
-                                        <small>
-                                            Customer submissions
-                                        </small>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                            <div className="admin-quick-grid">
-
-                                <button
-                                    className="admin-quick-card"
-                                    onClick={() =>
-                                        setActiveTab(
-                                            "users"
-                                        )
-                                    }
-                                >
-
-                                    <div className="quick-icon blue-bg">
-                                        ◉
-                                    </div>
-
-                                    <div>
-
-                                        <strong>
-                                            Manage Users
-                                        </strong>
-
-                                        <span>
-                                            Search, filter and view users
-                                        </span>
-
-                                    </div>
-
-                                    <b>→</b>
-
-                                </button>
-
-                                <button
-                                    className="admin-quick-card"
-                                    onClick={() =>
-                                        setActiveTab(
-                                            "stores"
-                                        )
-                                    }
-                                >
-
-                                    <div className="quick-icon purple-bg">
-                                        ▣
-                                    </div>
-
-                                    <div>
-
-                                        <strong>
-                                            Manage Stores
-                                        </strong>
-
-                                        <span>
-                                            View and manage registered stores
-                                        </span>
-
-                                    </div>
-
-                                    <b>→</b>
-
-                                </button>
-
-                            </div>
-
-                        </section>
-                    )}
-            {/* Users */}
-
-                {activeTab ===
-                    "users" && (
-
-                        <section className="admin-content">
-
-                            <div className="admin-section-header">
-
-                                <div>
-
-                                    <span>
-                                        PLATFORM USERS
-                                    </span>
-
-                                    <h2>
-                                        All Users
-                                    </h2>
-
-                                    <p>
-                                        Manage registered users and administrators.
-                                    </p>
-
-                                </div>
-
-                                <button
-                                    className="admin-primary-btn"
-                                    onClick={() => {
-
-                                        setFormError("");
-                                        setFormMessage("");
-
-                                        setShowUserModal(
-                                            true
-                                        );
-
-                                    }}
-                                >
-                                    + Add User
-                                </button>
-
-                            </div>
-
-                            <div className="admin-filter-card">
-
-                                <div className="filter-search">
-
-                                    <label>
-                                        Name
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        placeholder="Search by name..."
-                                        value={
-                                            userFilters.name
-                                        }
-                                        onChange={(e) =>
-                                            updateUserFilter(
-                                                "name",
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-
-                                </div>
-
-                                <div className="filter-search">
-
-                                    <label>
-                                        Email
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        placeholder="Search by email..."
-                                        value={
-                                            userFilters.email
-                                        }
-                                        onChange={(e) =>
-                                            updateUserFilter(
-                                                "email",
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-
-                                </div>
-
-                                <div className="filter-search">
-
-                                    <label>
-                                        Address
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        placeholder="Search address..."
-                                        value={
-                                            userFilters.address
-                                        }
-                                        onChange={(e) =>
-                                            updateUserFilter(
-                                                "address",
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-
-                                </div>
-
-                                <div className="filter-select">
-
-                                    <label>
-                                        Role
-                                    </label>
-
-                                    <select
-                                        value={
-                                            userFilters.role
-                                        }
-                                        onChange={(e) =>
-                                            updateUserFilter(
-                                                "role",
-                                                e.target.value
-                                            )
-                                        }
-                                    >
-
-                                        <option value="">
-                                            All roles
-                                        </option>
-
-                                        <option value="USER">
-                                            User
-                                        </option>
-
-                                        <option value="OWNER">
-                                            Owner
-                                        </option>
-
-                                        <option value="ADMIN">
-                                            Admin
-                                        </option>
-
-                                    </select>
-
-                                </div>
-
-                                <div className="filter-select">
-
-                                    <label>
-                                        Sort By
-                                    </label>
-
-                                    <select
-                                        value={
-                                            userFilters.sortBy
-                                        }
-                                        onChange={(e) =>
-                                            updateUserFilter(
-                                                "sortBy",
-                                                e.target.value
-                                            )
-                                        }
-                                    >
-
-                                        <option value="name">
-                                            Name
-                                        </option>
-
-                                        <option value="email">
-                                            Email
-                                        </option>
-
-                                        <option value="address">
-                                            Address
-                                        </option>
-
-                                        <option value="role">
-                                            Role
-                                        </option>
-
-                                    </select>
-
-                                </div>
-
-                                <button
-                                    className="sort-btn"
-                                    onClick={() =>
-                                        updateUserFilter(
-                                            "sortOrder",
-                                            userFilters.sortOrder ===
-                                                "asc"
-                                                ? "desc"
-                                                : "asc"
-                                        )
-                                    }
-                                >
-
-                                    {userFilters.sortOrder ===
-                                        "asc"
-                                        ? "↑ Ascending"
-                                        : "↓ Descending"}
-
-                                </button>
-
-                                <button
-                                    className="reset-btn"
-                                    onClick={
-                                        resetUserFilters
-                                    }
-                                >
-                                    Reset
-                                </button>
-
-                            </div>
-
-                            <div className="admin-table-card">
-
-                                <div className="admin-table-header">
-
-                                    <div>
-
-                                        <strong>
-                                            Users
-                                        </strong>
-
-                                        <span>
-                                            {users.length} results
-                                        </span>
-
-                                    </div>
-
-                                    {usersLoading && (
-
-                                        <span className="table-loading">
-                                            Updating...
-                                        </span>
-
-                                    )}
-
-                                </div>
-
-                                <div className="admin-table-scroll">
-
-                                    <table className="admin-table">
-
-                                        <thead>
-
-                                            <tr>
-                                                <th>User</th>
-                                                <th>Email</th>
-                                                <th>Address</th>
-                                                <th>Role</th>
-                                                <th>Action</th>
-                                            </tr>
-
-                                        </thead>
-
-                                        <tbody>
-
-                                            {users.length ===
-                                                0 ? (
-
-                                                <tr>
-
-                                                    <td
-                                                        colSpan="5"
-                                                        className="table-empty"
-                                                    >
-                                                        No users found.
-                                                    </td>
-
-                                                </tr>
-
-                                            ) : (
-
-                                                users.map(
-                                                    (user) => (
-
-                                                        <tr
-                                                            key={
-                                                                user.id
-                                                            }
-                                                        >
-
-                                                            <td>
-
-                                                                <div className="table-user">
-
-                                                                    <div className="mini-avatar">
-
-                                                                        {(
-                                                                            user.name ||
-                                                                            "U"
-                                                                        )
-                                                                            .charAt(
-                                                                                0
-                                                                            )
-                                                                            .toUpperCase()}
-
-                                                                    </div>
-
-                                                                    <div>
-
-                                                                        <strong>
-                                                                            {user.name}
-                                                                        </strong>
-
-                                                                        <small>
-                                                                            ID #
-                                                                            {
-                                                                                user.id
-                                                                            }
-                                                                        </small>
-
-                                                                    </div>
-
-                                                                </div>
-
-                                                            </td>
-
-                                                            <td>
-                                                                {
-                                                                    user.email
-                                                                }
-                                                            </td>
-
-                                                            <td>
-                                                                {
-                                                                    user.address ||
-                                                                    "—"
-                                                                }
-                                                            </td>
-
-                                                            <td>
-
-                                                                <span
-                                                                    className={`role-badge ${String(
-                                                                        user.role
-                                                                    ).toLowerCase()}`}
-                                                                >
-                                                                    {
-                                                                        user.role
-                                                                    }
-                                                                </span>
-
-                                                            </td>
-
-                                                            <td>
-
-                                                                <button
-                                                                    className="view-btn"
-                                                                    onClick={() =>
-                                                                        openUserDetails(
-                                                                            user.id
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    View Details
-                                                                </button>
-
-                                                            </td>
-
-                                                        </tr>
-
-                                                    )
-                                                )
-
-                                            )}
-
-                                        </tbody>
-
-                                    </table>
-
-                                </div>
-
-                            </div>
-
-                        </section>
-
-                    )}
-            {/* Stores */}
-
-                {activeTab ===
-                    "stores" && (
-
-                        <section className="admin-content">
-
-                            <div className="admin-section-header">
-
-                                <div>
-
-                                    <span>
-                                        BUSINESS DIRECTORY
-                                    </span>
-
-                                    <h2>
-                                        All Stores
-                                    </h2>
-
-                                    <p>
-                                        Manage stores registered on the platform.
-                                    </p>
-
-                                </div>
-
-                                <button
-                                    className="admin-primary-btn"
-                                    onClick={() => {
-
-                                        setFormError("");
-                                        setFormMessage("");
-
-                                        setShowStoreModal(
-                                            true
-                                        );
-
-                                    }}
-                                >
-                                    + Add Store
-                                </button>
-
-                            </div>
-
-                            <div className="admin-filter-card">
-
-                                <div className="filter-search">
-
-                                    <label>
-                                        Name
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        placeholder="Search store..."
-                                        value={
-                                            storeFilters.name
-                                        }
-                                        onChange={(e) =>
-                                            updateStoreFilter(
-                                                "name",
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-
-                                </div>
-
-                                <div className="filter-search">
-
-                                    <label>
-                                        Email
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        placeholder="Search email..."
-                                        value={
-                                            storeFilters.email
-                                        }
-                                        onChange={(e) =>
-                                            updateStoreFilter(
-                                                "email",
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-
-                                </div>
-
-                                <div className="filter-search">
-
-                                    <label>
-                                        Address
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        placeholder="Search address..."
-                                        value={
-                                            storeFilters.address
-                                        }
-                                        onChange={(e) =>
-                                            updateStoreFilter(
-                                                "address",
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-
-                                </div>
-
-                                <div className="filter-select">
-
-                                    <label>
-                                        Sort By
-                                    </label>
-
-                                    <select
-                                        value={
-                                            storeFilters.sortBy
-                                        }
-                                        onChange={(e) =>
-                                            updateStoreFilter(
-                                                "sortBy",
-                                                e.target.value
-                                            )
-                                        }
-                                    >
-
-                                        <option value="name">
-                                            Name
-                                        </option>
-
-                                        <option value="email">
-                                            Email
-                                        </option>
-
-                                        <option value="address">
-                                            Address
-                                        </option>
-
-                                        <option value="rating">
-                                            Rating
-                                        </option>
-
-                                    </select>
-
-                                </div>
-
-                                <button
-                                    className="sort-btn"
-                                    onClick={() =>
-                                        updateStoreFilter(
-                                            "sortOrder",
-                                            storeFilters.sortOrder ===
-                                                "asc"
-                                                ? "desc"
-                                                : "asc"
-                                        )
-                                    }
-                                >
-
-                                    {storeFilters.sortOrder ===
-                                        "asc"
-                                        ? "↑ Ascending"
-                                        : "↓ Descending"}
-
-                                </button>
-
-                                <button
-                                    className="reset-btn"
-                                    onClick={
-                                        resetStoreFilters
-                                    }
-                                >
-                                    Reset
-                                </button>
-
-                            </div>
-
-                            <div className="admin-table-card">
-
-                                <div className="admin-table-header">
-
-                                    <div>
-
-                                        <strong>
-                                            Stores
-                                        </strong>
-
-                                        <span>
-                                            {stores.length} results
-                                        </span>
-
-                                    </div>
-
-                                    {storesLoading && (
-
-                                        <span className="table-loading">
-                                            Updating...
-                                        </span>
-
-                                    )}
-
-                                </div>
-
-                                <div className="admin-table-scroll">
-
-                                    <table className="admin-table">
-
-                                        <thead>
-
-                                            <tr>
-                                                <th>Store</th>
-                                                <th>Email</th>
-                                                <th>Address</th>
-                                                <th>Rating</th>
-                                                <th>Owner ID</th>
-                                            </tr>
-
-                                        </thead>
-
-                                        <tbody>
-
-                                            {stores.length ===
-                                                0 ? (
-
-                                                <tr>
-
-                                                    <td
-                                                        colSpan="5"
-                                                        className="table-empty"
-                                                    >
-                                                        No stores found.
-                                                    </td>
-
-                                                </tr>
-
-                                            ) : (
-
-                                                stores.map(
-                                                    (store) => (
-
-                                                        <tr
-                                                            key={
-                                                                store.id
-                                                            }
-                                                        >
-
-                                                            <td>
-
-                                                                <div className="table-user">
-
-                                                                    <div className="store-mini-icon">
-                                                                        ▣
-                                                                    </div>
-
-                                                                    <div>
-
-                                                                        <strong>
-                                                                            {
-                                                                                store.name
-                                                                            }
-                                                                        </strong>
-
-                                                                        <small>
-                                                                            ID #
-                                                                            {
-                                                                                store.id
-                                                                            }
-                                                                        </small>
-
-                                                                    </div>
-
-                                                                </div>
-
-                                                            </td>
-
-                                                            <td>
-                                                                {
-                                                                    store.email
-                                                                }
-                                                            </td>
-
-                                                            <td>
-                                                                {
-                                                                    store.address
-                                                                }
-                                                            </td>
-
-                                                            <td>
-
-                                                                <div className="table-rating">
-
-                                                                    <strong>
-                                                                        {Number(
-                                                                            store.overall_rating ||
-                                                                            0
-                                                                        ).toFixed(
-                                                                            1
-                                                                        )}
-                                                                    </strong>
-
-                                                                    <span>
-                                                                        {stars(
-                                                                            store.overall_rating
-                                                                        )}
-                                                                    </span>
-
-                                                                </div>
-
-                                                            </td>
-
-                                                            <td>
-                                                                #
-                                                                {
-                                                                    store.owner_id
-                                                                }
-                                                            </td>
-
-                                                        </tr>
-
-                                                    )
-                                                )
-
-                                            )}
-
-                                        </tbody>
-
-                                    </table>
-
-                                </div>
-
-                            </div>
-
-                        </section>
-
-                    )}
+                )}
 
             </main>
-            {/* Add User Modal */}
 
-            {showUserModal && (
 
-                <div
-                    className="admin-modal-overlay"
-                    onMouseDown={(e) => {
-
-                        if (
-                            e.target ===
-                            e.currentTarget
-                        ) {
-                            closeUserModal();
-                        }
-
-                    }}
-                >
-
-                    <div className="admin-modal">
-
-                        <div className="modal-header">
-
-                            <div>
-
-                                <span>
-                                    USER MANAGEMENT
-                                </span>
-
-                                <h2>
-                                    Add New User
-                                </h2>
-
-                            </div>
-
-                            <button
-                                className="modal-close"
-                                onClick={
-                                    closeUserModal
-                                }
-                            >
-                                ×
-                            </button>
-
-                        </div>
-
-                        {formMessage && (
-
-                            <div className="admin-alert success">
-                                ✓ {formMessage}
-                            </div>
-
-                        )}
-
-                        {formError && (
-
-                            <div className="admin-alert error">
-                                ! {formError}
-                            </div>
-
-                        )}
-
-                        <form
-                            onSubmit={
-                                handleCreateUser
-                            }
-                            className="admin-form"
-                        >
-
-                            <div className="form-two-column">
-
-                                <div className="admin-field">
-
-                                    <label>
-                                        Name
-                                    </label>
-
-                                    <input
-                                        name="name"
-                                        value={
-                                            userForm.name
-                                        }
-                                        onChange={
-                                            handleUserChange
-                                        }
-                                        placeholder="Minimum 20 characters"
-                                        required
-                                    />
-
-                                    <small>
-                                        {
-                                            userForm
-                                                .name
-                                                .length
-                                        }
-                                        /60
-                                    </small>
-
-                                </div>
-
-                                <div className="admin-field">
-
-                                    <label>
-                                        Email
-                                    </label>
-
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        value={
-                                            userForm.email
-                                        }
-                                        onChange={
-                                            handleUserChange
-                                        }
-                                        placeholder="user@example.com"
-                                        required
-                                    />
-
-                                </div>
-
-                            </div>
-
-                            <div className="form-two-column">
-
-                                <div className="admin-field">
-
-                                    <label>
-                                        Password
-                                    </label>
-
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        value={
-                                            userForm.password
-                                        }
-                                        onChange={
-                                            handleUserChange
-                                        }
-                                        placeholder="8-16 characters"
-                                        required
-                                    />
-
-                                </div>
-
-                                <div className="admin-field">
-
-                                    <label>
-                                        Role
-                                    </label>
-
-                                    <select
-                                        name="role"
-                                        value={
-                                            userForm.role
-                                        }
-                                        onChange={
-                                            handleUserChange
-                                        }
-                                    >
-
-                                        <option value="USER">
-                                            Normal User
-                                        </option>
-
-                                        <option value="ADMIN">
-                                            Administrator
-                                        </option>
-
-                                    </select>
-
-                                </div>
-
-                            </div>
-
-                            <div className="admin-field">
-
-                                <label>
-                                    Address
-                                </label>
-
-                                <textarea
-                                    name="address"
-                                    value={
-                                        userForm.address
-                                    }
-                                    onChange={
-                                        handleUserChange
-                                    }
-                                    maxLength="400"
-                                    rows="3"
-                                    placeholder="Enter address..."
-                                />
-
-                                <small>
-                                    {
-                                        userForm
-                                            .address
-                                            .length
-                                    }
-                                    /400
-                                </small>
-
-                            </div>
-
-                            <div className="modal-actions">
-
-                                <button
-                                    type="button"
-                                    className="admin-secondary-btn"
-                                    onClick={
-                                        closeUserModal
-                                    }
-                                    disabled={
-                                        formLoading
-                                    }
-                                >
-                                    Cancel
-                                </button>
-
-                                <button
-                                    type="submit"
-                                    className="admin-primary-btn"
-                                    disabled={
-                                        formLoading
-                                    }
-                                >
-                                    {formLoading
-                                        ? "Creating..."
-                                        : "Create User"}
-                                </button>
-
-                            </div>
-
-                        </form>
-
-                    </div>
-
-                </div>
-
-            )}
-            {/* Add Store Modal */}
-
-            {showStoreModal && (
-
-                <div
-                    className="admin-modal-overlay"
-                    onMouseDown={(e) => {
-
-                        if (
-                            e.target ===
-                            e.currentTarget
-                        ) {
-                            closeStoreModal();
-                        }
-
-                    }}
-                >
-
-                    <div className="admin-modal">
-
-                        <div className="modal-header">
-
-                            <div>
-
-                                <span>
-                                    BUSINESS MANAGEMENT
-                                </span>
-
-                                <h2>
-                                    Add New Store
-                                </h2>
-
-                            </div>
-
-                            <button
-                                className="modal-close"
-                                onClick={
-                                    closeStoreModal
-                                }
-                            >
-                                ×
-                            </button>
-
-                        </div>
-
-                        {formMessage && (
-
-                            <div className="admin-alert success">
-                                ✓ {formMessage}
-                            </div>
-
-                        )}
-
-                        {formError && (
-
-                            <div className="admin-alert error">
-                                ! {formError}
-                            </div>
-
-                        )}
-
-                        <form
-                            onSubmit={
-                                handleCreateStore
-                            }
-                            className="admin-form"
-                        >
-
-                            <div className="admin-field">
-
-                                <label>
-                                    Store Name
-                                </label>
-
-                                <input
-                                    name="name"
-                                    value={
-                                        storeForm.name
-                                    }
-                                    onChange={
-                                        handleStoreChange
-                                    }
-                                    placeholder="Store name"
-                                    required
-                                />
-
-                            </div>
-
-                            <div className="admin-field">
-
-                                <label>
-                                    Store Email
-                                </label>
-
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={
-                                        storeForm.email
-                                    }
-                                    onChange={
-                                        handleStoreChange
-                                    }
-                                    placeholder="store@example.com"
-                                    required
-                                />
-
-                            </div>
-
-                            <div className="admin-field">
-
-                                <label>
-                                    Address
-                                </label>
-
-                                <textarea
-                                    name="address"
-                                    value={
-                                        storeForm.address
-                                    }
-                                    onChange={
-                                        handleStoreChange
-                                    }
-                                    maxLength="400"
-                                    rows="3"
-                                    placeholder="Store address..."
-                                    required
-                                />
-
-                            </div>
-
-                            <div className="admin-field">
-
-                                <label>
-                                    Store Owner
-                                </label>
-
-                                <select
-                                    name="ownerId"
-                                    value={
-                                        storeForm.ownerId
-                                    }
-                                    onChange={
-                                        handleStoreChange
-                                    }
-                                    required
-                                >
-
-                                    <option value="">
-                                        Select an owner
-                                    </option>
-
-                                    {ownerUsers.length ===
-                                        0 ? (
-
-                                        <option disabled>
-                                            No owners available
-                                        </option>
-
-                                    ) : (
-
-                                        ownerUsers.map(
-                                            (owner) => (
-
-                                                <option
-                                                    key={
-                                                        owner.id
-                                                    }
-                                                    value={
-                                                        owner.id
-                                                    }
-                                                >
-                                                    {
-                                                        owner.name
-                                                    }
-                                                    {" — "}
-                                                    {
-                                                        owner.email
-                                                    }
-                                                </option>
-
-                                            )
-                                        )
-
-                                    )}
-
-                                </select>
-
-                            </div>
-
-                            <div className="modal-actions">
-
-                                <button
-                                    type="button"
-                                    className="admin-secondary-btn"
-                                    onClick={
-                                        closeStoreModal
-                                    }
-                                    disabled={
-                                        formLoading
-                                    }
-                                >
-                                    Cancel
-                                </button>
-
-                                <button
-                                    type="submit"
-                                    className="admin-primary-btn"
-                                    disabled={
-                                        formLoading
-                                    }
-                                >
-                                    {formLoading
-                                        ? "Creating..."
-                                        : "Create Store"}
-                                </button>
-
-                            </div>
-
-                        </form>
-
-                    </div>
-
-                </div>
-
-            )}
-            {/* User Details Modal */}
-
-            {selectedUser && (
-
-                <div
-                    className="admin-modal-overlay"
-                    onMouseDown={(e) => {
-
-                        if (
-                            e.target ===
-                            e.currentTarget
-                        ) {
-                            setSelectedUser(
-                                null
-                            );
-                        }
-
-                    }}
-                >
-
-                    <div className="admin-modal details-modal">
-
-                        <div className="modal-header">
-
-                            <div>
-
-                                <span>
-                                    USER PROFILE
-                                </span>
-
-                                <h2>
-                                    User Details
-                                </h2>
-
-                            </div>
-
-                            <button
-                                className="modal-close"
-                                onClick={() =>
-                                    setSelectedUser(
-                                        null
-                                    )
-                                }
-                            >
-                                ×
-                            </button>
-
-                        </div>
-
-                        {selectedUser.loading ? (
-
-                            <div className="modal-loading">
-
-                                <div className="admin-spinner"></div>
-
-                                Loading details...
-
-                            </div>
-
-                        ) : selectedUser.error ? (
-
-                            <div className="admin-alert error">
-
-                                ! {selectedUser.error}
-
-                            </div>
-
-                        ) : (
-
-                            <>
-
-                                <div className="detail-profile">
-
-                                    <div className="detail-avatar">
-
-                                        {(selectedUser.name ||
-                                            "U")
-                                            .charAt(0)
-                                            .toUpperCase()}
-
-                                    </div>
-
-                                    <div>
-
-                                        <h3>
-                                            {
-                                                selectedUser.name
-                                            }
-                                        </h3>
-
-                                        <span
-                                            className={`role-badge ${String(
-                                                selectedUser.role
-                                            ).toLowerCase()}`}
-                                        >
-                                            {
-                                                selectedUser.role
-                                            }
-                                        </span>
-
-                                    </div>
-
-                                </div>
-
-                                <div className="detail-grid">
-
-                                    <div>
-
-                                        <span>
-                                            Email
-                                        </span>
-
-                                        <strong>
-                                            {
-                                                selectedUser.email
-                                            }
-                                        </strong>
-
-                                    </div>
-
-                                    <div>
-
-                                        <span>
-                                            Address
-                                        </span>
-
-                                        <strong>
-                                            {
-                                                selectedUser.address ||
-                                                "Not provided"
-                                            }
-                                        </strong>
-
-                                    </div>
-
-                                    <div>
-
-                                        <span>
-                                            User ID
-                                        </span>
-
-                                        <strong>
-                                            #
-                                            {
-                                                selectedUser.id
-                                            }
-                                        </strong>
-
-                                    </div>
-
-                                    <div>
-
-                                        <span>
-                                            Role
-                                        </span>
-
-                                        <strong>
-                                            {
-                                                selectedUser.role
-                                            }
-                                        </strong>
-
-                                    </div>
-
-                                </div>
-
-                                {selectedUser.stores &&
-                                    selectedUser.stores.length >
-                                    0 && (
-
-                                        <div className="owner-store-details">
-
-                                            <h3>
-                                                Owned Stores
-                                            </h3>
-
-                                            {
-                                                selectedUser.stores.map(
-                                                    (
-                                                        store
-                                                    ) => (
-
-                                                        <div
-                                                            className="owner-store-row"
-                                                            key={
-                                                                store.id
-                                                            }
-                                                        >
-
-                                                            <div>
-
-                                                                <strong>
-                                                                    {
-                                                                        store.name
-                                                                    }
-                                                                </strong>
-
-                                                                <span>
-                                                                    {
-                                                                        store.email
-                                                                    }
-                                                                </span>
-
-                                                            </div>
-
-                                                            <div>
-
-                                                                <strong>
-                                                                    {Number(
-                                                                        store.average_rating ||
-                                                                        0
-                                                                    ).toFixed(
-                                                                        1
-                                                                    )}
-                                                                </strong>
-
-                                                                <span>
-                                                                    ★ Rating
-                                                                </span>
-
-                                                            </div>
-
-                                                        </div>
-
-                                                    )
-                                                )
-                                            }
-
-                                        </div>
-
-                                    )}
-
-                            </>
-
-                        )}
-
-                    </div>
-
-                </div>
-
-            )}
-            {/* Admin Profile Modal */}
-
-            {showProfileModal && (
-
-                <div
-                    className="admin-modal-overlay"
-                    onMouseDown={(e) => {
-
-                        if (
-                            e.target ===
-                            e.currentTarget
-                        ) {
-                            closeProfileModal();
-                        }
-
-                    }}
-                >
-
-                    <div className="admin-modal">
-
-                        <div className="modal-header">
-
-                            <div>
-
-                                <span>
-                                    ADMINISTRATOR PROFILE
-                                </span>
-
-                                <h2>
-                                    My Profile
-                                </h2>
-
-                            </div>
-
-                            <button
-                                className="modal-close"
-                                onClick={
-                                    closeProfileModal
-                                }
-                            >
-                                ×
-                            </button>
-
-                        </div>
-
-                        <div className="admin-profile-large">
-
-                            <div className="admin-profile-large-avatar">
-
-                                {adminName
-                                    .charAt(0)
-                                    .toUpperCase()}
-
-                            </div>
-
-                            <div>
-
-                                <h3>
-                                    {adminName}
-                                </h3>
-
-                                <span>
-                                    System Administrator
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                        <div className="admin-profile-details">
-
-                            <div>
-
-                                <span>
-                                    NAME
-                                </span>
-
-                                <strong>
-                                    {adminName}
-                                </strong>
-
-                            </div>
-
-                            <div>
-
-                                <span>
-                                    EMAIL
-                                </span>
-
-                                <strong>
-                                    {adminEmail}
-                                </strong>
-
-                            </div>
-
-                            <div>
-
-                                <span>
-                                    ADDRESS
-                                </span>
-
-                                <strong>
-                                    {adminAddress}
-                                </strong>
-
-                            </div>
-
-                            <div>
-
-                                <span>
-                                    ROLE
-                                </span>
-
-                                <strong>
-                                    ADMIN
-                                </strong>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            )}
+            <AddUserModal
+                show={showUserModal}
+                formLoading={formLoading}
+                formMessage={formMessage}
+                formError={formError}
+                userForm={userForm}
+                handleUserChange={
+                    handleUserChange
+                }
+                handleCreateUser={
+                    handleCreateUser
+                }
+                closeUserModal={
+                    closeUserModal
+                }
+            />
+
+
+            <AddStoreModal
+                show={showStoreModal}
+                formLoading={formLoading}
+                formMessage={formMessage}
+                formError={formError}
+                storeForm={storeForm}
+                handleStoreChange={
+                    handleStoreChange
+                }
+                handleCreateStore={
+                    handleCreateStore
+                }
+                closeStoreModal={
+                    closeStoreModal
+                }
+                ownerUsers={ownerUsers}
+            />
+
+
+            <UserDetailsModal
+                selectedUser={selectedUser}
+                closeUserDetails={
+                    closeUserDetails
+                }
+            />
+
+
+            <AdminProfileModal
+                show={showProfileModal}
+                adminName={adminName}
+                adminEmail={adminEmail}
+                adminAddress={adminAddress}
+                closeProfileModal={
+                    closeProfileModal
+                }
+            />
 
         </div>
     );
